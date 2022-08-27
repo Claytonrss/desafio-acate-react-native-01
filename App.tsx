@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ApolloProvider } from '@apollo/client'
+import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native'
+import { Provider } from 'react-redux'
+import { Home } from './src/screens/Home'
+import { client } from './src/services'
+import store from './src/store'
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <StatusBar
+          barStyle={'light-content'}
+          backgroundColor="transparent"
+          translucent
+        />
+        <SafeAreaView style={styles.AndroidSafeArea}>
+          <Home />
+        </SafeAreaView>
+      </Provider>
+    </ApolloProvider>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  AndroidSafeArea: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#1F1E25',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
-});
+})
